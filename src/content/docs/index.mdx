@@ -1,0 +1,32 @@
+---
+title: Sistemi e Reti - Quarta
+description: Dispensa del corso di Sistemi e Reti
+template: splash # Remove or comment out this line to display the site sidebar on this page.
+---
+
+import {Card, CardGrid, LinkCard} from '@astrojs/starlight/components';
+import { HeroX } from '@six-tech/starlight-theme-six/components';
+import { default as CardLink } from "/src/components/CardLink.astro";
+import heroImage from '/public/sistemi.jpg';
+
+<HeroX
+	tagline="Dispensa del corso di Sistemi e Reti <br/> Creato dal Prof. Michael Zanardi"
+	height="400px"
+	mt="4rem"
+	mb="2rem"
+	taglineColor="#fff"
+	image={{
+		background: heroImage,
+		backgroundSize: "cover",
+		contentPosition: "middle-center"
+	}}
+/>
+
+<CardGrid>
+	<CardLink title="Comandi" icon="seti:powershell" href="lezioni/switch/01-accesso-e-hostname/">
+		Comandi CISCO e Packet Tracer
+	</CardLink>
+	<Card title="Teoria" icon="open-book">
+		ISO/OSI, TCP/IP, Ethernet, Routing e TCP/UDP
+	</Card>
+</CardGrid>

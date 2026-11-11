@@ -1,0 +1,141 @@
+---
+title: Configurazione di SSH
+description: Laboratorio I - Accesso remoto sicuro allo switch con SSH
+---
+
+import { Steps } from '@six-tech/starlight-theme-six/components';
+import { Aside } from "@astrojs/starlight/components";
+import { default as Callout } from "/src/components/Callout.astro";
+
+**SSH** (Secure Shell) permette di gestire lo switch da remoto con una connessione cifrata, a differenza di Telnet che invia tutto in chiaro. Per usarlo serve un indirizzo IP di management sullo switch.
+
+<Callout icon="information" title="Scenario di esempio">
+
+| Parametro        | Valore           |
+|------------------|------------------|
+| Hostname         | SW1              |
+| Dominio          | scuola.local     |
+| Utente           | admin            |
+| Password utente  | Admin!2024       |
+| IP di management | 192.168.1.2/24   |
+| Gateway          | 192.168.1.1      |
+
+</Callout>
+
+## Prerequisiti
+
+- Hostname e password di enable configurati.
+- Un PC collegato allo switch e configurato nella rete 192.168.1.0/24.
+- Uno switch con immagine IOS che supporta la crittografia (k9).
+
+## Procedura
+
+<Steps>
+
+### Configurare hostname e dominio
+
+Le chiavi RSA vengono generate a partire da hostname e nome di dominio.
+
+```cisco
+SW1> enable
+SW1# configure terminal
+SW1(config)# ip domain-name scuola.local
+```
+
+### Creare un utente locale
+
+```cisco
+SW1(config)# username admin secret Admin!2024
+```
+
+### Generare le chiavi RSA
+
+```cisco
+SW1(config)# crypto key generate rsa modulus 2048
+The name for the keys will be: SW1.scuola.local
+% The key modulus size is 2048 bits
+% Generating 2048 bit RSA keys, keys will be non-exportable...[OK]
+```
+
+### Abilitare SSH versione 2
+
+```cisco
+SW1(config)# ip ssh version 2
+```
+
+### Configurare le linee VTY
+
+```cisco
+SW1(config)# line vty 0 15
+SW1(config-line)# transport input ssh
+SW1(config-line)# login local
+SW1(config-line)# exec-timeout 5 0
+SW1(config-line)# exit
+```
+
+- `transport input ssh` consente solo SSH e blocca Telnet.
+- `login local` usa l'utente creato con `username`.
+
+### Assegnare l'IP di management
+
+Lo switch usa un'interfaccia virtuale (SVI), qui la VLAN 1.
+
+```cisco
+SW1(config)# interface vlan 1
+SW1(config-if)# ip address 192.168.1.2 255.255.255.0
+SW1(config-if)# no shutdown
+SW1(config-if)# exit
+SW1(config)# ip default-gateway 192.168.1.1
+SW1(config)# end
+```
+
+<Aside type="note">
+Per un ambiente reale è consigliabile usare una VLAN di management dedicata invece della VLAN 1. La creazione delle VLAN verrà trattata il prossimo anno.
+</Aside>
+
+### Verificare
+
+```cisco
+SW1# show ip ssh
+SW1# show ssh
+SW1# show ip interface brief
+```
+
+Dal PC:
+
+```text
+ssh -l admin 192.168.1.2
+```
+
+Alla connessione compare il banner MOTD (vedi la prima pagina), poi la richiesta della password.
+
+### Salvare la configurazione
+
+```cisco
+SW1# copy running-config startup-config
+```
+
+</Steps>
+
+## Comandi utili
+
+| Comando                          | Funzione                              |
+|----------------------------------|---------------------------------------|
+| `ip domain-name DOMINIO`         | Imposta il dominio                    |
+| `crypto key generate rsa`        | Genera le chiavi RSA                  |
+| `ip ssh version 2`               | Forza SSH v2                          |
+| `transport input ssh`            | Consente solo SSH sulle linee VTY     |
+| `show ip ssh`                    | Mostra stato e versione di SSH        |
+| `show ssh`                       | Mostra le sessioni SSH attive         |
+
+<Aside type="caution" title="Attenzione">
+Se `crypto key generate rsa` restituisce un errore, verifica di aver impostato sia l'hostname (diverso da `Switch`) sia `ip domain-name`.
+</Aside>
+
+## Esercizio
+
+1. Configura SSH con dominio `esempio.local` e utente `studente`.
+2. Assegna un IP di management alla VLAN 1.
+3. Collega un PC e prova la connessione SSH.
+4. Verifica che Telnet venga rifiutato.
+5. Salva la configurazione.

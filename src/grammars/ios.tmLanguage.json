@@ -1,0 +1,161 @@
+{
+  "fileTypes": [
+    "-confg"
+  ],
+  "foldingStartMarker": "^interface|^router|^ip access-list extended",
+  "foldingStopMarker": "^!",
+  "name": "Cisco IOS",
+  "patterns": [
+    {
+      "match": "^([a-zA-Z0-9_\\-\\.]+)(\\([a-zA-Z0-9_\\-\\./]+\\))?([>#])",
+      "name": "meta.prompt.cisco",
+      "captures": {
+        "1": { "name": "entity.name.function.prompt.cisco" },
+        "2": { "name": "string.other.mode.cisco" },
+        "3": { "name": "keyword.operator.prompt.cisco" }
+      }
+    },
+    {
+      "match": "^(C:\\\\>)",
+      "name": "entity.name.function.prompt.cisco"
+    },
+    {
+      "match": "\\b(enable|disable|configure terminal|conf t|exit|end|show|ping|traceroute|copy|write|reload|erase)\\b",
+      "name": "keyword.control.cisco"
+    },
+    {
+      "match": "\\b(running|startup)-config\\b",
+      "name": "string.unquoted.config.cisco"
+    },
+    {
+      "match": "\\binterface\\b",
+      "name": "support.control.cisco"
+    },
+    {
+      "match": "\\b(vlan|vtp|hostname|routing)\\b",
+      "name": "keyword.other.vlan.cisco"
+    },
+    {
+      "match": "\\b(mode|access(?!-)|trunk|native|allowed|nonegotiate|encapsulation|dot1[qQ]|isl|range|dynamic|desirable|server|client|transparent|domain(?!-)|version|primary|pruning|status|brief|id)\\b",
+      "name": "keyword.other.switchport.cisco"
+    },
+    {
+      "match": "(?<=\\bname )\\S+",
+      "name": "string.unquoted.name.cisco"
+    },
+    {
+      "match": "(?<=\\bhostname )\\S+",
+      "name": "string.unquoted.name.cisco"
+    },
+    {
+      "match": "(?<=\\bvtp password )\\S+",
+      "name": "string.unquoted.password.cisco"
+    },
+    {
+      "match": "\\b(?:[Ff]ast[Ee]thernet|[Gg]igabit[Ee]thernet|[Tt]en[Gg]igabit[Ee]thernet|[Ff]a|[Gg]i|[Ee]t)\\s?\\d+(?:/\\d+)*(?:\\.\\d+)?\\b",
+      "name": "constant.character.interface.cisco"
+    },
+    {
+      "match": "(\\bshutdown\\b|^boot-(start|end)-marker)",
+      "name": "constant.language.cisco"
+    },
+    {
+      "match": "((^|no )(interface|line|ip (access-list (extended|standard)|dhcp (pool|excluded-address)|route|classless|subnet-zero|nat|http|local pool|flow-export|flow-top-talkers|inspect|domain|ips|host)|router|voice-(card|port)|dial-peer|voice (translation-(rule|profile)|register (global|pool|dn)|service)|application$|crypto (pki|keyring|isakmp (profile|policy|client configuration)|ipsec (profile|transform-set)|(dynamic-)?map)|telephony-service|ephone(-dn)?|banner|(class|policy|route)-map|map-class)|\\b(ssid|pvc|certificate)|service|clock|boot|logging|control-plane|aaa|(tftp|snmp|radius)-server|ntp|bridge|(access|dialer)-list|archive)\\b",
+      "name": "support.control.cisco"
+    },
+    {
+      "match": "\\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b",
+      "name": "constant.numeric.cisco"
+    },
+    {
+      "match": "\\b((Fast|Gigabit)?Ethernet|Dialer|Dot11Radio|ATM|BRI|Tunnel(Group-)?Async|BVI|Loopback|Null|Port-channel|Virtual-(Access|Dot11Radio|PPP|Template))((\\d+[\\.:/])*)?\\d+\\b",
+      "name": "constant.character.interface.cisco"
+    },
+    {
+      "match": "^!.*$",
+      "name": "comment.bang.cisco"
+    },
+    {
+      "match": "\\b(description|remark|system message)\\s.*$",
+      "name": "comment.documentation.cisco"
+    },
+    {
+      "match": "\\bno\\b",
+      "name": "constant.language.cisco"
+    },
+    {
+      "match": "^version.*$",
+      "name": "constant.language.cisco"
+    },
+    {
+      "match": "^(username|hostname|enable)\\b",
+      "name": "keyword.other.cisco"
+    },
+    {
+      "match": "\\b(network|passive-interface|redistribute|auto-summary|synchronization|bgp|neighbor|default-information)\\b",
+      "name": "keyword.other.routing.cisco"
+    },
+    {
+      "match": "\\b(ip (address|unnumbered|proxy-arp|nat|nbar|virtual-reassembly|access-group|verify)|speed|(full-|half-)?duplex|cdp enable|encapsulation|dialer(-group)?|compress|ppp|crypto|channel|station-role|encryption|broadcast-key|snmp|isdn|dsl|tunnel|bandwidth|fair-queue|physical-layer|async mode|peer default|switchport|media-type|clockrate)\\b",
+      "name": "keyword.other.interface.cisco"
+    },
+    {
+      "match": "\\b((session|exec)-timeout|login|password|stopbits|access-class|transport (input|output))\\b",
+      "name": "keyword.other.line.cisco"
+    },
+    {
+      "match": "\\b(domain-name|default-router|dns-server|host|client-(name|identifier)|option)\\b",
+      "name": "keyword.other.dhcp.cisco"
+    },
+    {
+      "match": "\\b(device-security-mode|mac-address|type|button|video|username)\\b",
+      "name": "keyword.other.ephone.cisco"
+    },
+    {
+      "match": "\\b(number|name|call-forward|hold-alert)\\b",
+      "name": "keyword.other.ephonedn.cisco"
+    },
+    {
+      "match": "\\b(load|max-ephones|max-dn|ip|auto|calling-number|timeouts|time-zone|time-format|date-format|dialplan-pattern|max-conferences|moh|web|(dn|time)-webedit|transfer-(system|pattern)|create)\\b",
+      "name": "keyword.other.telephony.cisco"
+    },
+    {
+      "match": "\\b(translation-profile|answer-address|destination-pattern|progress_ind|incoming|direct-inward-dial|port|max-conn|information-type|session (target|protocol)|dtmf-relay|codec|vad)\\b",
+      "name": "keyword.other.dial-peer.cisco"
+    },
+    {
+      "match": "\\b(compand-type|comfort-noise|cptone)\\b",
+      "name": "keyword.other.voice-port.cisco"
+    },
+    {
+      "match": "\\b(permit|deny|log|established|evaluate)\\b",
+      "name": "keyword.other.acl.cisco"
+    },
+    {
+      "match": "\\b(auth(entic|oriz)ation|accounting)\\b",
+      "name": "keyword.other.aaa.cisco"
+    },
+    {
+      "match": "\\bmatch (ip precedence|protocol|access-group)\\b",
+      "name": "keyword.other.class-map.cisco"
+    },
+    {
+      "match": "\\b(class(-default)?|set ip dscp|priority)\\b",
+      "name": "keyword.other.policy-map.cisco"
+    },
+    {
+      "match": "\\b(frame-relay|service-policy)\\b",
+      "name": "keyword.other.map-class.cisco"
+    },
+    {
+      "match": "\\b[0-9a-fA-F]{4}\\.[0-9a-fA-F]{4}\\.[0-9a-fA-F]{4}\\b",
+      "name": "constant.numeric.mac.cisco"
+    },
+    {
+      "match": "\\b\\d+\\b",
+      "name": "constant.numeric.cisco"
+    }
+  ],
+  "scopeName": "source.cisco-ios-config",
+  "uuid": "DDC9CB9E-AF2D-48A7-A600-12498CA0A59A"
+}

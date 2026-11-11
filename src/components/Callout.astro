@@ -1,0 +1,23 @@
+---
+import { Icon } from '@astrojs/starlight/components';
+import type { StarlightIcon } from '@astrojs/starlight/types';
+
+interface Props {
+	title?: string;
+	icon?: StarlightIcon;
+}
+
+const { title, icon } = Astro.props;
+---
+
+<div class="callout">
+	{(icon || title) && (
+		<p class="starlight-aside__title" aria-hidden="true" style="margin-top: 0.5rem;">
+			{icon && <Icon name={icon} class="starlight-aside__icon" />}
+			{title}
+		</p>
+	)}
+	<div class="callout-description">
+		<slot />
+	</div>
+</div>

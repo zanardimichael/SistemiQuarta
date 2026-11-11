@@ -1,0 +1,121 @@
+---
+title: Accesso, hostname e banner
+description: Laboratorio I - Prima configurazione di uno switch Cisco - hostname e banner MOTD
+---
+
+import { Steps } from '@six-tech/starlight-theme-six/components';
+import { Aside } from "@astrojs/starlight/components";
+import { default as Callout } from "/src/components/Callout.astro";
+
+La prima configurazione di uno switch Cisco avviene da riga di comando (CLI) tramite la porta console. In questo laboratorio impariamo a muoverci tra i modi operativi di IOS, a cambiare l'**hostname** e a impostare un **banner MOTD**.
+
+<Callout icon="information" title="Scenario di esempio">
+
+| Parametro | Valore                                           |
+|-----------|--------------------------------------------------|
+| Hostname  | SW1                                              |
+| Banner    | Accesso consentito solo al personale autorizzato |
+
+</Callout>
+
+## Prerequisiti
+
+- Uno switch Cisco (reale o simulato in Packet Tracer).
+- Accesso alla console dello switch.
+
+## Modi operativi di IOS
+
+| Prompt             | Modo                   | Come ci si arriva              |
+|--------------------|------------------------|--------------------------------|
+| `Switch>`          | User EXEC              | Accesso iniziale               |
+| `Switch#`          | Privileged EXEC        | `enable`                       |
+| `Switch(config)#`  | Global configuration   | `configure terminal`           |
+
+## Procedura
+
+<Steps>
+
+### Entrare in modalità di configurazione globale
+
+```cisco
+Switch> enable
+Switch# configure terminal
+Switch(config)#
+```
+
+### Cambiare l'hostname
+
+```cisco
+Switch(config)# hostname SW1
+SW1(config)#
+```
+
+Il prompt cambia subito. L'hostname non può contenere spazi.
+
+### Configurare il banner MOTD
+
+Il banner **MOTD** (Message Of The Day) viene mostrato a chiunque si colleghi allo switch, prima del login.
+
+```cisco
+SW1(config)# banner motd #Accesso consentito solo al personale autorizzato#
+```
+
+Il carattere `#` è il **delimitatore**: può essere qualsiasi carattere che non compare nel testo. Per un banner su più righe, scrivi solo il delimitatore iniziale e vai a capo:
+
+```cisco
+SW1(config)# banner motd #
+Enter TEXT message.  End with the character '#'.
+ATTENZIONE
+Accesso consentito solo al personale autorizzato.
+#
+```
+
+<Aside type="caution" title="Contenuto del banner">
+Non usare messaggi di benvenuto come "Benvenuto": un accesso non autorizzato potrebbe essere giustificato da un invito implicito. Indica invece che l'accesso è riservato.
+</Aside>
+
+### Verificare
+
+```cisco
+SW1(config)# end
+SW1# exit
+```
+
+Premi `Invio` per rientrare: il banner appare prima del prompt.
+
+```cisco
+SW1# show running-config | include hostname
+SW1# show running-config | begin banner
+```
+
+### Salvare la configurazione
+
+```cisco
+SW1# copy running-config startup-config
+```
+Oppure
+```cisco
+SW1# write
+```
+
+</Steps>
+
+## Comandi utili
+
+| Comando                | Funzione                              |
+|------------------------|---------------------------------------|
+| `hostname NOME`        | Imposta il nome dello switch          |
+| `banner motd #testo#`  | Imposta il banner MOTD                |
+| `no banner motd`       | Rimuove il banner MOTD                |
+| `show running-config`  | Mostra la configurazione in uso       |
+
+<Aside type="note">
+Le modifiche restano solo in `running-config` (RAM) finché non le salvi in `startup-config`. Dopo un riavvio senza salvataggio vengono perse.
+</Aside>
+
+## Esercizio
+
+1. Imposta l'hostname `SW-AULA1`.
+2. Configura un banner MOTD su due righe.
+3. Esci dalla CLI, rientra e verifica che il banner appaia.
+4. Salva la configurazione.

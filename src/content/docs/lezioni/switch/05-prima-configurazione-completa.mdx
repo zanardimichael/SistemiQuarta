@@ -1,0 +1,84 @@
+---
+title: Prima configurazione completa
+description: Riepilogo - Script di prima configurazione di uno switch Cisco
+---
+
+import { Aside } from "@astrojs/starlight/components";
+import { default as Callout } from "/src/components/Callout.astro";
+
+Questa pagina riassume tutti i passi dei laboratori precedenti in un unico script da copiare nella CLI.
+
+<Callout icon="information" title="Scenario di esempio">
+
+| Parametro        | Valore         |
+|------------------|----------------|
+| Hostname         | SW1            |
+| Dominio          | scuola.local   |
+| IP di management | 192.168.1.2/24 |
+| Gateway          | 192.168.1.1    |
+
+</Callout>
+
+## Script completo
+
+```cisco
+Switch> enable
+Switch# configure terminal
+
+! Hostname e banner
+Switch(config)# hostname SW1
+SW1(config)# banner motd #Accesso consentito solo al personale autorizzato#
+SW1(config)# no ip domain-lookup
+
+! Password di enable
+SW1(config)# enable secret Cisco!2024
+SW1(config)# service password-encryption
+
+! Utente locale
+SW1(config)# username admin secret Admin!2024
+
+! Console
+SW1(config)# line console 0
+SW1(config-line)# password Console!2024
+SW1(config-line)# login
+SW1(config-line)# logging synchronous
+SW1(config-line)# exec-timeout 5 0
+SW1(config-line)# exit
+
+! SSH
+SW1(config)# ip domain-name scuola.local
+SW1(config)# crypto key generate rsa modulus 2048
+SW1(config)# ip ssh version 2
+SW1(config)# line vty 0 15
+SW1(config-line)# transport input ssh
+SW1(config-line)# login local
+SW1(config-line)# exec-timeout 5 0
+SW1(config-line)# exit
+
+! IP di management
+SW1(config)# interface vlan 1
+SW1(config-if)# ip address 192.168.1.2 255.255.255.0
+SW1(config-if)# no shutdown
+SW1(config-if)# exit
+SW1(config)# ip default-gateway 192.168.1.1
+SW1(config)# end
+
+SW1# copy running-config startup-config
+```
+
+<Aside type="note">
+`no ip domain-lookup` evita lunghe attese quando si sbaglia un comando, perché IOS non tenta di risolvere il testo come nome di dominio.
+</Aside>
+
+## Verifica finale
+
+```cisco
+SW1# show running-config
+SW1# show ip ssh
+SW1# show ip interface brief
+```
+
+## Esercizio
+
+1. Applica lo script a uno switch con nome diverso e indirizzi a tua scelta.
+2. Verifica banner, password di enable, console e connessione SSH.
