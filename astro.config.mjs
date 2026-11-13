@@ -48,7 +48,9 @@ export default defineConfig({
 			],
 
 			plugins: [
-				starlightThemeSix({}),
+				starlightThemeSix({
+					footerText: 'A cura del Prof. Michael Zanardi'
+				}),
 			],
 
 			head: [
@@ -92,15 +94,10 @@ export default defineConfig({
 				{
 					label: 'Corso di Sistemi e Reti',
 					items: [
-						{
-							label: 'Introduzione al Corso',
-							link: '/lezioni/',
-						},
-						{
-							label: 'Laboratorio I - Switch',
-							autogenerate: { directory: 'lezioni/switch' },
-							collapsed: true,
-						},
+						{ label: 'Introduzione al Corso', link: '/lezioni/' },
+						{ label: 'Teoria', autogenerate: { directory: 'lezioni/teoria' }, collapsed: false },
+						{ label: 'Laboratorio I - Switch', autogenerate: { directory: 'lezioni/switch' }, collapsed: true },
+						{ label: 'Laboratorio II - Router', autogenerate: { directory: 'lezioni/router' }, collapsed: true },
 					]
 				},
 			],

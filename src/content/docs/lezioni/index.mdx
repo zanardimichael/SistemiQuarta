@@ -1,0 +1,97 @@
+---
+title: Introduzione al Corso di Sistemi e Reti - Quarta
+description: Guida completa al corso di Sistemi e Reti per la classe quarta superiore - Teoria e Laboratorio Cisco
+---
+import {Aside} from "@astrojs/starlight/components";
+
+Benvenuto nella dispensa ufficiale di **Sistemi e Reti** per la **classe quarta**.  
+Questo testo è stato progettato come un vero e proprio libro di testo digitale: accompagna lo studio teorico delle architetture di rete e dei protocolli dello stack TCP/IP con guide pratiche passo-passo per il laboratorio su apparati **Cisco IOS** (Switch e Router) in **Cisco Packet Tracer** e l'analisi del traffico con **Wireshark**.
+
+---
+
+## Parte I — Teoria
+
+La parte teorica segue l'evoluzione del messaggio attraverso i livelli dell'architettura di rete, dal mezzo trasmissivo fisico fino al livello di trasporto.
+
+<Aside title="Attenzione!" type="caution">
+	La parte di Teoria è ancora in fase di preparazione.
+	È in funzione solo la parte [Laboratorio I - Switch](#laboratorio-i--switch-lezioniswitch)
+</Aside>
+
+### Modulo 1 — Le architetture di rete
+
+| Lezione | Argomenti principali |
+| :--- | :--- |
+| [01. I modelli e le architetture di rete](/lezioni/teoria/01-modelli-e-architetture/) | Classificazione delle reti (PAN, LAN, MAN, WAN), topologie, commutazione di circuito e di pacchetto, architettura a livelli, protocolli, PDU e incapsulamento |
+| [02. Il modello ISO/OSI](/lezioni/teoria/02-modello-iso-osi/) | I 7 livelli del modello di riferimento ISO/OSI, funzioni di ogni strato, comunicazione orizzontale e verticale, PDU ai vari livelli |
+| [03. Lo stack TCP/IP e gli standard](/lezioni/teoria/03-stack-tcp-ip-e-standard/) | Architettura TCP/IP a 4 livelli, confronto con ISO/OSI, enti di standardizzazione (ISO, IEEE, IETF/RFC, ITU-T, ICANN/IANA), Wireshark e Packet Tracer |
+
+### Modulo 2 — Il Physical e Network Access Layer del TCP/IP
+
+| Lezione | Argomenti principali |
+| :--- | :--- |
+| [04. Il progetto IEEE 802, LLC, MAC, HDLC e PPP](/lezioni/teoria/04-ieee-802-llc-mac-hdlc-ppp/) | Standard IEEE 802, sottolivelli LLC e MAC, struttura dell'indirizzo MAC a 48 bit, protocolli punto-punto HDLC e PPP |
+| [05. IEEE 802.3: Ethernet e CSMA/CD](/lezioni/teoria/05-ethernet-e-csma-cd/) | Evoluzione di Ethernet, struttura del frame 802.3 ed Ethernet II, domini di collisione, tecnica CSMA/CD, algoritmo di Backoff esponenziale e calcolo dei tempi di attesa |
+| [06. Lo switching e il PoE](/lezioni/teoria/06-switching-e-poe/) | Da Hub a Switch Layer 2, tabella MAC (learning, flooding, forwarding, filtering), Store-and-Forward vs Cut-Through, Half/Full-Duplex, Power over Ethernet (PoE) |
+| [07. IEEE 802.11: la rete Wi-Fi](/lezioni/teoria/07-wifi-ieee-802-11/) | Architettura wireless (BSS, ESS, SSID), standard Wi-Fi, bande 2.4/5/6 GHz, problema del nodo nascosto, accesso CSMA/CA con RTS/CTS, posizionamento degli Access Point |
+
+### Modulo 3 — Il Network Layer del TCP/IP
+
+| Lezione | Argomenti principali |
+| :--- | :--- |
+| [08. Il livello Network e il protocollo IP](/lezioni/teoria/08-livello-network-e-protocollo-ip/) | Funzioni del livello Network, header IPv4, frammentazione e MTU, struttura degli indirizzi IPv4, classi di indirizzi, IP privati/pubblici, introduzione a IPv6 |
+| [09. Subnetting e piani di indirizzamento](/lezioni/teoria/09-subnetting-e-piani-di-indirizzamento/) | Maschera di sottorete, notazione CIDR `/n`, tecnica del Subnetting a maschera fissa (FLSM), calcolo di rete/broadcast/range host, progettazione di piani di indirizzamento LAN |
+| [10. CIDR, VLSM e Supernetting](/lezioni/teoria/10-cidr-vlsm-supernetting/) | Superamento delle classi con CIDR, subnetting a maschera variabile (VLSM) senza sprechi, reti punto-punto `/30`, aggregazione delle rotte (Supernetting / Route Summarization) |
+
+### Modulo 4 — L'evoluzione di IP e il monitoring della rete
+
+| Lezione | Argomenti principali |
+| :--- | :--- |
+| [11. I protocolli ARP e ICMP: ping e traceroute](/lezioni/teoria/11-arp-icmp-ping-traceroute/) | Risoluzione degli indirizzi con ARP (Request, Reply, ARP Cache), protocollo ICMP (codici e messaggi), diagnostica di rete con `ping` e `traceroute` / `tracert` |
+
+### Modulo 5 — Instradamento e interconnessione di reti geografiche
+
+| Lezione | Argomenti principali |
+| :--- | :--- |
+| [12. Algoritmi di routing e Autonomous System](/lezioni/teoria/12-routing-algoritmi-autonomous-system/) | Scenari di interconnessione, tabella di routing, Distanza Amministrativa e metrica, algoritmi Distance Vector (Bellman-Ford) e Link State (Dijkstra), Autonomous System e routing gerarchico |
+| [13. Protocolli IGP, EGP e reti MPLS](/lezioni/teoria/13-protocolli-igp-egp-mpls/) | Protocolli IGP (RIP e OSPF in dettaglio), protocolli EGP (BGP), commutazione a etichetta nelle reti Multiprotocollo MPLS (LER, LSR, LSP, Push/Swap/Pop) |
+
+### Modulo 6 — Il Transport Layer del TCP/IP
+
+| Lezione | Argomenti principali |
+| :--- | :--- |
+| [14. Porte, socket, multiplexing e UDP](/lezioni/teoria/14-transport-layer-porte-socket-udp/) | Comunicazione tra processi, porte logiche (Well-Known, Registered, Dynamic), concetto di Socket, Multiplexing e Demultiplexing, servizi connectionless e protocollo UDP |
+| [15. Il protocollo TCP e la sicurezza del trasporto](/lezioni/teoria/15-protocollo-tcp/) | Servizi connection-oriented, header TCP, Three-Way Handshake, chiusura della connessione, Sliding Window, controllo di flusso e congestione, confronto TCP vs UDP, vulnerabilità (Port Scanning, SYN Flood) |
+
+---
+
+## Parte II — Laboratorio
+
+La parte laboratoriale è suddivisa in **due macro-argomenti** per distinguere con chiarezza le attività di commutazione nella rete locale (**Switch**) e quelle di instradamento tra reti differenti (**Router**).
+
+### Laboratorio I — Switch (`lezioni/switch/`)
+
+Configurazione iniziale, messa in sicurezza, gestione remota e verifica di uno switch aziendale Cisco tramite CLI:
+
+1. [01. Accesso, hostname e banner MOTD](/lezioni/switch/01-accesso-e-hostname/)
+2. [02. Password di enable (`enable secret`)](/lezioni/switch/02-password-enable/)
+3. [03. Password di console (`line console 0`)](/lezioni/switch/03-password-console/)
+4. [04. Configurazione di SSH, linee VTY, SVI e Default Gateway](/lezioni/switch/04-configurazione-ssh/)
+5. [05. Prima configurazione completa (Script di riepilogo)](/lezioni/switch/05-prima-configurazione-completa/)
+6. [06. Tabella MAC, configurazione delle porte e diagnostica](/lezioni/switch/06-tabella-mac-e-diagnostica/)
+
+
+<Aside title="Attenzione!" type="caution">
+	La seguente parte è ancora in fase di preparazione.
+</Aside>
+
+### Laboratorio II — Router (`lezioni/router/`)
+
+Conoscenza dell'hardware del router, configurazione delle interfacce IPv4/IPv6 e implementazione del routing statico e dinamico:
+
+1. [01. Hardware del router e configurazione iniziale](/lezioni/router/01-hardware-e-configurazione-base/)
+2. [02. Indirizzamento IP sulle interfacce (IPv4 e IPv6)](/lezioni/router/02-indirizzamento-ip-interfacce/)
+3. [03. Routing statico e Default Route](/lezioni/router/03-routing-statico/)
+4. [04. Routing dinamico: protocollo RIPv2](/lezioni/router/04-routing-dinamico-rip/)
+5. [05. Routing dinamico: protocollo OSPF](/lezioni/router/05-routing-dinamico-ospf/)
+6. [06. Rete aziendale completa: Subnetting, Switch e Router](/lezioni/router/06-rete-aziendale-completa/)

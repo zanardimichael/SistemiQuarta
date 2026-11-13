@@ -1,5 +1,5 @@
 ---
-title: Configurazione di SSH
+title: 04. Configurazione di SSH
 description: Laboratorio I - Accesso remoto sicuro allo switch con SSH
 ---
 
@@ -51,7 +51,7 @@ SW1(config)# username admin secret Admin!2024
 ### Generare le chiavi RSA
 
 ```cisco
-SW1(config)# crypto key generate rsa modulus 2048
+SW1(config)# crypto key generate rsa general-keys modulus 2048
 The name for the keys will be: SW1.scuola.local
 % The key modulus size is 2048 bits
 % Generating 2048 bit RSA keys, keys will be non-exportable...[OK]

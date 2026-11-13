@@ -1,0 +1,149 @@
+---
+title: 06. Tabella MAC, porte e diagnostica dello switch
+description: Laboratorio I - Verifica della MAC Address Table, configurazione delle porte (description, speed, duplex) e diagnostica su switch Cisco
+---
+
+import { Steps } from '@six-tech/starlight-theme-six/components';
+import { Aside } from "@astrojs/starlight/components";
+import { default as Callout } from "/src/components/Callout.astro";
+
+Dopo aver completato la prima configurazione e la messa in sicurezza dello switch, in questo laboratorio impariamo a **ispezionare la tabella degli indirizzi MAC** (*MAC Address Table*), a documentare e configurare le singole porte fisiche (`description`, `duplex`, `speed`), a disabilitare le porte inutilizzate per sicurezza e a verificare la connettività di management tramite SVI e Default Gateway.
+
+<Callout icon="information" title="Scenario di esempio">
+
+| Parametro | Valore |
+| :--- | :--- |
+| Hostname Switch | `SW1` (IP SVI VLAN 1: `192.168.1.2/24`, Gateway: `192.168.1.1`) |
+| Porta `Fa0/1` | Collegata a `PC1` (`192.168.1.10/24`) |
+| Porta `Fa0/2` | Collegata a `PC2` (`192.168.1.20/24`) |
+| Porta `Gi0/1` | Collegata al Router `R1` (`192.168.1.1/24`) |
+| Porte `Fa0/3 - 24` | Non utilizzate (da spegnere per sicurezza) |
+
+</Callout>
+
+## Prerequisiti
+
+- Uno switch Cisco `2960` in Packet Tracer collegato a due PC (`PC1` e `PC2`) e a un router (`R1`).
+- Configurazione di base già applicata (vedi la lezione precedente).
+
+## Procedura
+
+<Steps>
+
+### Verificare lo stato generale delle porte dello switch
+
+Prima di tutto controlliamo quali porte sono fisicamente collegate (`up/up` o `connected`) e quali sono scollegate (`down/down` o `notconnect`):
+
+```cisco
+SW1> enable
+SW1# show ip interface brief
+Interface              IP-Address      OK? Method Status                Protocol
+FastEthernet0/1        unassigned      YES unset  up                    up
+FastEthernet0/2        unassigned      YES unset  up                    up
+FastEthernet0/3        unassigned      YES unset  down                  down
+...
+GigabitEthernet0/1     unassigned      YES unset  up                    up
+Vlan1                  192.168.1.2     YES manual up                    up
+```
+
+Per vedere anche velocità (`100Mbps`/`1000Mbps`) e modalità (`full-duplex`):
+
+```cisco
+SW1# show interfaces status
+```
+
+### Esaminare la MAC Address Table (prima e dopo un ping)
+
+Controlliamo la tabella degli indirizzi MAC appresi dallo switch:
+
+```cisco
+SW1# show mac address-table
+          Mac Address Table
+-------------------------------------------
+Vlan    Mac Address       Type        Ports
+----    -----------       --------    -----
+   1    0001.42a1.1111    DYNAMIC     Fa0/1
+   1    0001.42a1.2222    DYNAMIC     Fa0/2
+```
+
+<Aside type="tip" title="Se la tabella MAC è vuota">
+Lo switch impara gli indirizzi MAC solo quando i dispositivi trasmettono dei frame! Se la tabella appare vuota, apri il terminale di `PC1` ed esegui `ping 192.168.1.20`: lo switch registrerà istantaneamente i MAC di `PC1` e `PC2` con tipo `DYNAMIC`.
+</Aside>
+
+Per cancellare tutte le voci apprese dinamicamente e osservare di nuovo il processo di apprendimento (*learning* e *flooding*):
+
+```cisco
+SW1# clear mac address-table dynamic
+```
+
+### Configurare descrizione, velocità e duplex sulle porte attive
+
+In una rete aziendale è fondamentale aggiungere un'etichetta descrittiva (`description`) su ogni porta importante per sapere subito dove porta ciascun cavo:
+
+```cisco
+SW1# configure terminal
+SW1(config)# interface fastEthernet 0/1
+SW1(config-if)# description Collegamento a PC1 - Ufficio Amministrazione
+SW1(config-if)# duplex full
+SW1(config-if)# speed 100
+SW1(config-if)# exit
+
+SW1(config)# interface gigabitEthernet 0/1
+SW1(config-if)# description Uplink verso Router R1 (Default Gateway)
+SW1(config-if)# exit
+```
+
+### Disabilitare in blocco le porte non utilizzate (`interface range`)
+
+Lasciare attive le prese a muro libere permette a chiunque di collegare un portatile non autorizzato alla LAN. Con il comando **`interface range`** possiamo selezionare e spegnere più porte contemporaneamente:
+
+```cisco
+SW1(config)# interface range fastEthernet 0/3 - 24, gigabitEthernet 0/2
+SW1(config-if-range)# description Porta inutilizzata - Spenta per sicurezza
+SW1(config-if-range)# shutdown
+SW1(config-if-range)# end
+```
+
+Le porte spente dall'amministratore appariranno nello stato **`administratively down`**. Per riattivarne una in futuro basterà entrare nell'interfaccia e dare `no shutdown`.
+
+### Verificare la raggiungibilità dello switch (SVI e Default Gateway)
+
+Verifichiamo dallo switch stesso di poter raggiungere sia i PC della LAN sia il Default Gateway:
+
+```cisco
+SW1# ping 192.168.1.10
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.1.10, timeout is 2 seconds:
+.!!!!
+Success rate is 80 percent (4/5), round-trip min/avg/max = 0/0/1 ms
+
+SW1# show ip arp
+```
+
+### Salvare la configurazione
+
+```cisco
+SW1# copy running-config startup-config
+```
+
+</Steps>
+
+## Comandi utili
+
+| Comando | Funzione |
+| :--- | :--- |
+| `show mac address-table` | Mostra la tabella degli indirizzi MAC e le porte associate |
+| `clear mac address-table dynamic` | Svuota le voci dinamiche della tabella MAC |
+| `show ip interface brief` | Mostra un riepilogo dello stato (`up`/`down`) di tutte le porte e SVI |
+| `show interfaces status` | Mostra descrizione, VLAN, duplex e velocità delle porte |
+| `description TESTO` | Aggiunge un commento descrittivo all'interfaccia |
+| `interface range fa0/X - Y` | Configura contemporaneamente un intervallo di porte |
+| `shutdown` / `no shutdown` | Disabilita / Abilita un'interfaccia |
+
+## Esercizio
+
+1. Collega 3 PC alle porte `Fa0/1`, `Fa0/2` e `Fa0/3` di uno switch `2960` e assegna loro gli indirizzi `192.168.10.11`, `.12` e `.13` (`/24`).
+2. Esegui un `ping` tra i PC e usa `show mac address-table` per annotare gli indirizzi MAC associati a ciascuna porta.
+3. Imposta una `description` chiara sulle porte `Fa0/1`, `Fa0/2` e `Fa0/3`.
+4. Spegni con un solo comando `interface range` tutte le porte dalla `Fa0/4` alla `Fa0/24` e verifica con `show ip interface brief` che risultino `administratively down`.
+5. Salva la configurazione.

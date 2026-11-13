@@ -81,3 +81,71 @@ html .expressive-code .frame.is-terminal .header::before {
     background-size: contain;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 16'%3E%3Ccircle cx='8' cy='8' r='8' fill='%23ff5f56'/%3E%3Ccircle cx='30' cy='8' r='8' fill='%23ffbd2e'/%3E%3Ccircle cx='52' cy='8' r='8' fill='%2327c93f'/%3E%3C/svg%3E");
 }
+
+@media (min-width: 768px) {
+    .container-wrapper-main {
+        grid-template-columns: 300px minmax(0, 1fr) !important;
+    }
+}
+
+@media (min-width: 1440px) {
+    .container-wrapper-main {
+        grid-template-columns: 380px minmax(0, 1fr) !important;
+    }
+}
+
+@media (min-width: 1440px) {
+    .aside .sidebar {
+        width: 380px;
+    }
+}
+
+
+.pagination-links {
+    display: grid !important;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+@media (min-width: 768px) {
+    .pagination-links {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+}
+
+.pagination-links a{
+    margin-left: unset !important;
+}
+
+.pagination-content {
+    width: 100%;
+}
+
+.pagination-label {
+    max-width: 100%;
+    text-align: left;
+    text-wrap: stable;
+}
+
+.next .pagination-label {
+    max-width: 100%;
+    text-align: right;
+    text-wrap: stable;
+}
+
+/* =========================================
+   FIX SIDEBAR COLLAPSE (Tema Six)
+   ========================================= */
+.container-group-link {
+    max-height: none !important;
+    overflow: hidden !important;
+}
+
+.container-sidebar-entry.collapsed > .container-group-link {
+    display: none !important;
+    max-height: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+}
